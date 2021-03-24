@@ -11,12 +11,3 @@
   /* background-color: red; */
   border: 1px solid blueviolet;
 }
-
-.row {
-  display: flex;
-}
-
-.cell {
-  height: 4rem;
-  width: 4rem;
-}

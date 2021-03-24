@@ -1,4 +1,4 @@
-interface ICell {
+export interface ICell {
   isEditable: boolean;
   value: number;
   possibleValues: number[];
@@ -10,12 +10,10 @@ export default function transformInitialBoard(
   initialBoard: number[][]
 ): ICell[][] {
   return initialBoard.map((row) =>
-    row.map((c) => {
-      return {
-        isEditable: c === 0 ? true : false,
-        value: c,
-        possibleValues: [],
-      };
-    })
+    row.map((c) => ({
+      isEditable: c === 0 ? true : false,
+      value: c,
+      possibleValues: [],
+    }))
   );
 }

@@ -1,16 +1,22 @@
+import styled from "@emotion/styled";
 import React from "react";
+import { ICell } from "../utilities/transformInitialBoard";
 import Cell from "./Cell";
 
 interface IProps {
-  rowData: number[];
+  row: ICell[];
 }
 
-export default function Row({ rowData }: IProps) {
+export default function Row({ row }: IProps) {
   return (
-    <div className="row">
-      {rowData.map((cell) => (
-        <Cell data={cell} />
+    <StyledRow>
+      {row.map((cell) => (
+        <Cell {...cell} />
       ))}
-    </div>
+    </StyledRow>
   );
 }
+
+const StyledRow = styled.div`
+  display: flex;
+`;
