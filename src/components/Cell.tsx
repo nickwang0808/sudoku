@@ -1,21 +1,38 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useState } from "react";
 import { ICell } from "../utilities/transformInitialBoard";
+import CellInput from "./CellInput";
 
 export default function Cell({ isEditable, possibleValues, value }: ICell) {
-  const handleCellClick = (e: any) => {
-    // check if control was pressed
-    // toggle input mode
-  };
+  const [inputMode, setInputMode] = useState<"value" | "possibleValues" | null>(
+    "possibleValues"
+  );
+  // keep track of the input here, use a callback to format and sanitize the input
+  const [input, setInput] = useState();
+
+  const handleCellClick = (e: React.MouseEvent) =>
+    e.ctrlKey ? setInputMode("possibleValues") : setInputMode("value");
 
   if (!isEditable) {
     return <StyledCellBase>{value}</StyledCellBase>;
-    // return <StyledCellBase>{value}</StyledCellBase>;
   } else if (!!value) {
-    return <StyledCellWithNewValue />;
+    return (
+      <StyledCellWithNewValue onClick={handleCellClick}>
+        <CellInput />
+      </StyledCellWithNewValue>
+    );
   } else if (possibleValues.length) {
-    return <StyledCellWithPossibleValue />;
-  } else return <StyledCellBase />;
+    return (
+      <StyledCellWithPossibleValue onClick={handleCellClick}>
+        <CellInput />
+      </StyledCellWithPossibleValue>
+    );
+  } else
+    return (
+      <StyledCellBase onClick={handleCellClick}>
+        <CellInput />
+      </StyledCellBase>
+    );
 }
 
 const StyledCellBase = styled.div`

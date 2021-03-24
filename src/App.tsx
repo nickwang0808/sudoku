@@ -7,8 +7,8 @@ import transformInitialBoard from "./utilities/transformInitialBoard";
 export default function App() {
   return (
     <div className="App">
-      {transformInitialBoard(initialBoards[0]).map((row) => (
-        <Row row={row} />
+      {transformInitialBoard(initialBoards[0]).map((row, i) => (
+        <Row row={row} key={i} rowIndex={i} />
       ))}
     </div>
   );

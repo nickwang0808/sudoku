@@ -5,13 +5,15 @@ import Cell from "./Cell";
 
 interface IProps {
   row: ICell[];
+  rowIndex: number;
 }
 
-export default function Row({ row }: IProps) {
+export default function Row({ row, rowIndex }: IProps) {
   return (
     <StyledRow>
-      {row.map((cell) => (
-        <Cell {...cell} />
+      {row.map((cell, i) => (
+        // we keep track of the position by assigning an unique string "row,column" with the index
+        <Cell {...cell} key={`${rowIndex},${i}`} />
       ))}
     </StyledRow>
   );
