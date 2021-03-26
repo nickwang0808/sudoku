@@ -8,8 +8,9 @@ import transformInitialBoard, {
 interface IStore {
   board: ICell[][];
   status: ReturnType<typeof validateBoard>;
-  handleSetBoard: (position: number[], value: number) => void;
+  handleSetBoard: (position: number[], value: string) => void;
   handleValidateBoard: () => void;
+  resetBoard: () => void;
 }
 
 const BOARD = initialBoards[0];
@@ -21,6 +22,7 @@ const initialState: IStore = {
     isValid: true,
   },
   handleValidateBoard: () => {},
+  resetBoard: () => {},
 };
 
 export const AppContext = createContext<IStore>(initialState);
@@ -48,11 +50,13 @@ export default function BoardProvider({ children }: { children: ReactNode }) {
   const handleValidateBoard = () => {
     // run validate board
     const deTransformBoard = board.map((row) =>
-      row.map((col) => col.value || 0)
+      row.map(({ value }) => (value ? Number(value) : 0))
     );
 
     setStatus(validateBoard(deTransformBoard));
   };
+
+  const resetBoard = () => setBoard(transformInitialBoard(BOARD));
 
   return (
     <AppContext.Provider
@@ -61,6 +65,7 @@ export default function BoardProvider({ children }: { children: ReactNode }) {
         status,
         handleSetBoard,
         handleValidateBoard,
+        resetBoard,
       }}
     >
       {children}

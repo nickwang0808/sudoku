@@ -1,6 +1,6 @@
 export interface ICell {
   isEditable: boolean;
-  value: number | undefined;
+  value: string | undefined;
 }
 
 /* transform the board into workable data table, isEditable is used to determine if the cell
@@ -11,7 +11,7 @@ export default function transformInitialBoard(
   return initialBoard.map((row) =>
     row.map((c) => ({
       isEditable: c === 0 ? true : false,
-      value: c === 0 ? undefined : c,
+      value: c === 0 ? "" : String(c),
     }))
   );
 }

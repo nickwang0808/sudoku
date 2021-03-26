@@ -1,5 +1,6 @@
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { AppContext } from "../store";
 import { ICell } from "../utilities/transformInitialBoard";
 
@@ -15,10 +16,6 @@ export default function Cell({
   const { handleSetBoard } = useContext(AppContext);
 
   /* use local state to manage the input, prevent undefined in input */
-  const [input, setInput] = useState(value ?? "");
-  useEffect(() => {
-    handleSetBoard(position, Number(input));
-  }, [input]);
 
   const handleSetInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -26,18 +23,25 @@ export default function Cell({
     const range = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     if (!range.includes(newValue)) {
       // alert("input nuber between 1 - 9");
-      setInput("");
+      handleSetBoard(position, value);
       return;
     }
-    setInput(newValue);
+    handleSetBoard(position, value);
   };
 
   if (!isEditable) {
-    return <StyledCellBase value={value} disabled />;
+    return (
+      <StyledCellBase
+        showBoldBorder={position[1] === 3 || position[1] === 6}
+        value={value}
+        disabled
+      />
+    );
   }
   return (
     <StyledCellWithInput
-      value={input}
+      showBoldBorder={position[1] === 3 || position[1] === 6}
+      value={value}
       type="text"
       maxLength={1}
       onChange={handleSetInput}
@@ -45,18 +49,25 @@ export default function Cell({
   );
 }
 
-const StyledCellBase = styled.input`
-  height: 4rem;
-  width: 4rem;
+const StyledCellBase = styled.input<{ showBoldBorder: boolean }>`
+  height: 3rem;
+  width: 3rem;
   display: flex;
   justify-content: center;
   align-items: center;
 
-  border: 1px solid red;
+  border: 1px solid grey;
   font-size: 2rem;
   text-align: center;
+  color: #5353b4;
+
+  ${({ showBoldBorder }) =>
+    showBoldBorder &&
+    css`
+      border-left: 5px solid grey;
+    `}
 `;
 
 const StyledCellWithInput = styled(StyledCellBase)`
-  color: #5353b4;
+  color: unset;
 `;
