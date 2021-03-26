@@ -1,8 +1,8 @@
 import cloneDeep from "lodash.clonedeep";
 import sample from "lodash.sample";
 import { createContext, ReactNode, useEffect, useState } from "react";
+import isBoardValid from "./algorism/isBoardValid";
 import solveSudoku from "./algorism/solveBoard.js";
-import isBoardValid from "./algorism/validateBoard";
 import { initialBoards } from "./data/initialBoard";
 import transformInitialBoard, {
   ICell,

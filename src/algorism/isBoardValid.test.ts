@@ -1,4 +1,4 @@
-import isBoardValid from "./validateBoard";
+import isBoardValid from "./isBoardValid";
 
 describe("validateBoard", () => {
   it("should fail when the board is not valid", () => {

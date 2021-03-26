@@ -1,6 +1,6 @@
 import { initialBoards } from "../data/initialBoard";
 import solveSudoku from "./solveBoard";
-import isBoardValid from "./validateBoard";
+import isBoardValid from "./isBoardValid";
 
 describe("solveBoard test", () => {
   const board = initialBoards[1];
