@@ -15,15 +15,12 @@ export default function Cell({
 }: IProps) {
   const { handleSetBoard } = useContext(AppContext);
 
-  /* use local state to manage the input, prevent undefined in input */
-
   const handleSetInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     const newValue = Number(value);
     const range = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     if (!range.includes(newValue)) {
-      // alert("input nuber between 1 - 9");
-      handleSetBoard(position, value);
+      handleSetBoard(position, "");
       return;
     }
     handleSetBoard(position, value);

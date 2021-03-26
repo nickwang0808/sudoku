@@ -9,18 +9,19 @@ export default function App() {
     board,
     status: { isComplete, isValid },
     resetBoard,
+    handleSolveSudoku,
   } = useContext(AppContext);
 
   return (
     <StyledContainer>
-      <h1>{`Board is ${isValid ? "valid" : "invalid"} and ${
+      <h3>{`Board is ${isValid ? "valid" : "invalid"} and ${
         isComplete ? "complete" : "incomplete"
-      }`}</h1>
+      }`}</h3>
       {board.map((row, i) => (
         <Row row={row} key={i} rowIndex={i} />
       ))}
       <button onClick={resetBoard}>Reset</button>
-      <button>Help me</button>
+      <button onClick={handleSolveSudoku}>Help me</button>
     </StyledContainer>
   );
 }

@@ -1,6 +1,6 @@
 export interface ICell {
   isEditable: boolean;
-  value: string | undefined;
+  value: string;
 }
 
 /* transform the board into workable data table, isEditable is used to determine if the cell

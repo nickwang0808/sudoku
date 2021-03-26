@@ -1,5 +1,8 @@
-import { createContext, ReactNode, useState } from "react";
-import validateBoard from "./algorism/validateBoard";
+import cloneDeep from "lodash.clonedeep";
+import sample from "lodash.sample";
+import { createContext, ReactNode, useEffect, useState } from "react";
+import solveSudoku from "./algorism/solveBoard.js";
+import isBoardValid from "./algorism/validateBoard";
 import { initialBoards } from "./data/initialBoard";
 import transformInitialBoard, {
   ICell,
@@ -7,13 +10,14 @@ import transformInitialBoard, {
 
 interface IStore {
   board: ICell[][];
-  status: ReturnType<typeof validateBoard>;
+  status: ReturnType<typeof isBoardValid>;
   handleSetBoard: (position: number[], value: string) => void;
   handleValidateBoard: () => void;
   resetBoard: () => void;
+  handleSolveSudoku: () => void;
 }
 
-const BOARD = initialBoards[0];
+const BOARD = sample(initialBoards)!;
 const initialState: IStore = {
   board: transformInitialBoard(BOARD),
   handleSetBoard: () => {},
@@ -23,6 +27,7 @@ const initialState: IStore = {
   },
   handleValidateBoard: () => {},
   resetBoard: () => {},
+  handleSolveSudoku: () => {},
 };
 
 export const AppContext = createContext<IStore>(initialState);
@@ -32,29 +37,42 @@ export default function BoardProvider({ children }: { children: ReactNode }) {
 
   const [status, setStatus] = useState<IStore["status"]>(initialState.status);
 
-  const handleSetBoard: IStore["handleSetBoard"] = (position, value) => {
-    // console.log(position);
+  const handleSetBoard: IStore["handleSetBoard"] = ([row, col], value) => {
+    // console({ value });
 
     setBoard((prev) => {
-      const [row, col] = position;
-      prev[row][col].value = value;
-      return prev;
+      /* without redux, we have to manually manage deep cloning objects, in real world app,
+      we should avoid useState with deep trees */
+      const tempBoard = cloneDeep(prev);
+      tempBoard[row][col].value = value;
+      return tempBoard;
     });
-    /* useEffect does not trigger when elem in deep nested obj changes, need to 
-    implement usePrevious hook, using this for now */
-    setTimeout(() => {
-      handleValidateBoard();
-    }, 0);
   };
 
   const handleValidateBoard = () => {
     // run validate board
     const deTransformBoard = board.map((row) =>
+      row.map(({ value }) => (value !== "" ? Number(value) : 0))
+    );
+    setStatus(isBoardValid(deTransformBoard));
+  };
+
+  const handleSolveSudoku = () => {
+    const deTransformBoard = board.map((row) =>
       row.map(({ value }) => (value ? Number(value) : 0))
     );
-
-    setStatus(validateBoard(deTransformBoard));
+    try {
+      const solvedBoard = solveSudoku(deTransformBoard);
+      setBoard(transformInitialBoard(solvedBoard));
+    } catch {
+      alert("board could not be solved, try resetting it");
+    }
   };
+
+  useEffect(() => {
+    // console("board changed");
+    handleValidateBoard();
+  }, [board]);
 
   const resetBoard = () => setBoard(transformInitialBoard(BOARD));
 
@@ -66,6 +84,7 @@ export default function BoardProvider({ children }: { children: ReactNode }) {
         handleSetBoard,
         handleValidateBoard,
         resetBoard,
+        handleSolveSudoku,
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import validateBoard from "./validateBoard";
+import isBoardValid from "./validateBoard";
 
 describe("validateBoard", () => {
   it("should fail when the board is not valid", () => {
@@ -14,7 +14,7 @@ describe("validateBoard", () => {
       [0, 1, 8, 6, 3, 0, 1, 9, 4], // dupe 1
     ];
 
-    expect(validateBoard(board).isValid).toEqual(false);
+    expect(isBoardValid(board).isValid).toEqual(false);
   });
   it("should pass when the board is not completed but valid", () => {
     const board = [
@@ -28,7 +28,7 @@ describe("validateBoard", () => {
       [2, 0, 0, 0, 1, 9, 0, 5, 0],
       [0, 0, 0, 0, 0, 0, 3, 8, 9],
     ];
-    expect(validateBoard(board).isValid).toEqual(true);
+    expect(isBoardValid(board).isValid).toEqual(true);
   });
   it("should fail when the sub grids are not valid", () => {
     const board = [
@@ -42,6 +42,6 @@ describe("validateBoard", () => {
       [2, 0, 0, 0, 1, 9, 0, 5, 0],
       [0, 0, 0, 0, 0, 0, 3, 8, 9],
     ];
-    expect(validateBoard(board).isValid).toEqual(false);
+    expect(isBoardValid(board).isValid).toEqual(false);
   });
 });

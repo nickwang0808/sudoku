@@ -2,7 +2,7 @@ import { chunk } from "lodash";
 import hasDuplicates from "../utilities/hasDuplicates";
 
 // check for row, col and block for duplicates, if none then pass
-export default function validateBoard(board: number[][]) {
+export default function isBoardValid(board: number[][]) {
   let isValid = true;
   let isComplete = true;
 
