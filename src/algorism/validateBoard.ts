@@ -7,9 +7,12 @@ export default function validateBoard(board: number[][]) {
   let isComplete = true;
 
   for (let index = 0; index < board.length; index++) {
-    // check rows for duplicates
     const row = board[index];
     const col = board.map((row) => row[index]);
+    // check if therea are 0s in the board
+    if (col.includes(0) || row.includes(0)) {
+      isComplete = false;
+    }
     if (hasDuplicates(row) || hasDuplicates(col)) {
       isValid = false;
       break;
@@ -34,11 +37,6 @@ export default function validateBoard(board: number[][]) {
         isValid = false;
         break;
       }
-    }
-
-    // check if board is complete
-    if (col.includes(0) || row.includes(0)) {
-      isComplete = false;
     }
   }
 

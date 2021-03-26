@@ -13,7 +13,7 @@ export default function Row({ row, rowIndex }: IProps) {
     <StyledRow>
       {row.map((cell, i) => (
         // we keep track of the position by assigning an unique string "row,column" with the index
-        <Cell {...cell} key={`${rowIndex},${i}`} />
+        <Cell cell={cell} position={[rowIndex, i]} key={`${rowIndex},${i}`} />
       ))}
     </StyledRow>
   );

@@ -1,41 +1,51 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { AppContext } from "../store";
 import { ICell } from "../utilities/transformInitialBoard";
-import CellInput from "./CellInput";
 
-export default function Cell({ isEditable, possibleValues, value }: ICell) {
-  const [inputMode, setInputMode] = useState<"value" | "possibleValues" | null>(
-    "possibleValues"
-  );
-  // keep track of the input here, use a callback to format and sanitize the input
-  const [input, setInput] = useState();
-
-  const handleCellClick = (e: React.MouseEvent) =>
-    e.ctrlKey ? setInputMode("possibleValues") : setInputMode("value");
-
-  if (!isEditable) {
-    return <StyledCellBase>{value}</StyledCellBase>;
-  } else if (!!value) {
-    return (
-      <StyledCellWithNewValue onClick={handleCellClick}>
-        <CellInput />
-      </StyledCellWithNewValue>
-    );
-  } else if (possibleValues.length) {
-    return (
-      <StyledCellWithPossibleValue onClick={handleCellClick}>
-        <CellInput />
-      </StyledCellWithPossibleValue>
-    );
-  } else
-    return (
-      <StyledCellBase onClick={handleCellClick}>
-        <CellInput />
-      </StyledCellBase>
-    );
+interface IProps {
+  cell: ICell;
+  position: number[];
 }
 
-const StyledCellBase = styled.div`
+export default function Cell({
+  cell: { isEditable, value },
+  position,
+}: IProps) {
+  const { handleSetBoard } = useContext(AppContext);
+
+  /* use local state to manage the input, prevent undefined in input */
+  const [input, setInput] = useState(value ?? "");
+  useEffect(() => {
+    handleSetBoard(position, Number(input));
+  }, [input]);
+
+  const handleSetInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    const newValue = Number(value);
+    const range = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    if (!range.includes(newValue)) {
+      // alert("input nuber between 1 - 9");
+      setInput("");
+      return;
+    }
+    setInput(newValue);
+  };
+
+  if (!isEditable) {
+    return <StyledCellBase value={value} disabled />;
+  }
+  return (
+    <StyledCellWithInput
+      value={input}
+      type="text"
+      maxLength={1}
+      onChange={handleSetInput}
+    />
+  );
+}
+
+const StyledCellBase = styled.input`
   height: 4rem;
   width: 4rem;
   display: flex;
@@ -44,12 +54,9 @@ const StyledCellBase = styled.div`
 
   border: 1px solid red;
   font-size: 2rem;
+  text-align: center;
 `;
 
-const StyledCellWithPossibleValue = styled(StyledCellBase)`
-  font-size: unset;
-`;
-
-const StyledCellWithNewValue = styled(StyledCellBase)`
-  color: #292955;
+const StyledCellWithInput = styled(StyledCellBase)`
+  color: #5353b4;
 `;
